@@ -1,5 +1,14 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+        }
+      ]
+    ],
+
     "name": "goit-hw-reactnative",
     "slug": "goit-hw-reactnative",
     "version": "1.0.0",
@@ -11,15 +20,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-
         "backgroundColor": "#ffffff"
       }
     },

@@ -8,7 +8,14 @@ const AddPhotoSvg = (props) => (
     fill="none"
     {...props}
   >
-    <Circle cx={12.5} cy={12.5} r={12} fill="#fff" stroke="#FF6C00" />
+    <Circle
+      cx={12.5}
+      cy={12.5}
+      r={12}
+      viewBox="0 0 25 25"
+      fill="#fff"
+      stroke="#FF6C00"
+    />
     <Path
       fill="#FF6C00"
       fillRule="evenodd"
