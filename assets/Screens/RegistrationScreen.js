@@ -66,6 +66,19 @@ const RegistrationScreen = ({ navigation }) => {
   setCustomText(customTextProps);
 
   useEffect(() => {
+    const hideSubscription = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => {
+        setisShowKeyboard(false);
+      }
+    );
+
+    return () => {
+      hideSubscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
     async function prepare() {
       try {
         await loadApp();
