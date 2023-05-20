@@ -4,7 +4,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
     ],
@@ -12,7 +12,7 @@
     "name": "goit-hw-reactnative",
     "slug": "goit-hw-reactnative",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
 
     "userInterfaceStyle": "light",
     "splash": {
@@ -22,15 +22,18 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "jsEngine": "jsc"
     },
     "web": {
       "favicon": ""
-    }
+    },
+    "jsEngine": "hermes"
   }
 }

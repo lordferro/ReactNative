@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -13,24 +13,11 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import * as Font from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import { setCustomText } from "react-native-global-props";
-import AddPhotoSvg from "../Components/AddPhotoSvg";
+import AddPhotoSvg from "../../Components/AddPhotoSvg";
 import * as ImagePicker from "expo-image-picker";
-
-const loadApp = async () => {
-  await Font.loadAsync({
-    "Roboto-Regular": require("../Fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../Fonts/Roboto-Medium.ttf"),
-  });
-};
-
-const customTextProps = {
-  style: {
-    fontFamily: "Roboto-Regular",
-  },
-};
+import { useNavigation } from "@react-navigation/native";
+import { authCommonStyles } from "./authCommonStyles";
+import { ScreensCommonStyles, colors } from "../ScreensCommonStyles";
 
 const initialState = {
   login: "",
@@ -38,14 +25,15 @@ const initialState = {
   password: "",
 };
 
-const RegistrationScreen = ({ navigation }) => {
+const RegistrationScreen = () => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [passwordVisibleText, setPasswordVisibleText] = useState("Показать");
   const [isShowKeyboard, setisShowKeyboard] = useState(false);
-  const [appIsReady, setAppIsReady] = useState(false);
   const { height, width } = useWindowDimensions();
   const [image, setImage] = useState(null);
+
+  const navigation = useNavigation();
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -63,33 +51,18 @@ const RegistrationScreen = ({ navigation }) => {
     }
   };
 
-  setCustomText(customTextProps);
+  // useEffect(() => {
+  //   const hideSubscription = Keyboard.addListener(
+  //     Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+  //     () => {
+  //       setisShowKeyboard(false);
+  //     }
+  //   );
 
-  useEffect(() => {
-    const hideSubscription = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      () => {
-        setisShowKeyboard(false);
-      }
-    );
-
-    return () => {
-      hideSubscription.remove();
-    };
-  }, []);
-
-  useEffect(() => {
-    async function prepare() {
-      try {
-        await loadApp();
-      } catch (error) {
-        console.warn(error);
-      } finally {
-        setAppIsReady(true);
-      }
-    }
-    prepare();
-  }, []);
+  //   return () => {
+  //     hideSubscription.remove();
+  //   };
+  // }, []);
 
   const onSubmit = () => {
     keyboardHide();
@@ -102,16 +75,6 @@ const RegistrationScreen = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
-
-  if (!appIsReady) {
-    return null;
-  }
-
   const showPassword = (e) => {
     if (passwordVisibleText === "Показать") {
       setPasswordVisibleText("Скрыть");
@@ -122,21 +85,18 @@ const RegistrationScreen = ({ navigation }) => {
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={keyboardHide}
-      onLayout={onLayoutRootView}
-    >
-      <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={ScreensCommonStyles.container}>
         <ImageBackground
-          style={styles.backgroundImage}
-          source={require("../img/Photo_BG.jpg")}
+          style={authCommonStyles.backgroundImage}
+          source={require("../../img/Photo_BG.jpg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : ""}
           >
             <View
               style={{
-                ...styles.form,
+                ...authCommonStyles.form,
                 marginBottom: isShowKeyboard ? -160 : 0,
               }}
             >
@@ -154,63 +114,71 @@ const RegistrationScreen = ({ navigation }) => {
                   <AddPhotoSvg />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.formTitle}>Регистрация</Text>
+              <Text style={{ ...authCommonStyles.formTitle, marginTop: 92 }}>
+                Регистрация
+              </Text>
               <TextInput
-                style={{ ...styles.input, width: width - 32 }}
+                style={{ ...authCommonStyles.input, width: width - 32 }}
                 placeholder="Логин"
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={colors.placeholderTextColor}
                 value={state.login}
                 onFocus={() => setisShowKeyboard(true)}
                 onChangeText={(value) =>
                   setState((prevState) => ({ ...prevState, login: value }))
                 }
+                onSubmitEditing={onSubmit}
               ></TextInput>
               <TextInput
-                style={{ ...styles.input, width: width - 32 }}
+                style={{ ...authCommonStyles.input, width: width - 32 }}
                 placeholder="Адрес электронной почты"
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={colors.placeholderTextColor}
                 value={state.email}
                 onFocus={() => setisShowKeyboard(true)}
                 onChangeText={(value) =>
                   setState((prevState) => ({ ...prevState, email: value }))
                 }
+                onSubmitEditing={onSubmit}
               ></TextInput>
               <View>
                 <TextInput
                   secureTextEntry={passwordVisible}
-                  style={{ ...styles.input, width: width - 32 }}
+                  style={{ ...authCommonStyles.input, width: width - 32 }}
                   placeholder="Пароль"
-                  placeholderTextColor="#BDBDBD"
+                  placeholderTextColor={colors.placeholderTextColor}
                   value={state.password}
                   onFocus={() => setisShowKeyboard(true)}
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, password: value }))
                   }
+                  onSubmitEditing={onSubmit}
                 ></TextInput>
                 <TouchableOpacity
-                  style={styles.showPasswordBtn}
+                  style={authCommonStyles.showPasswordBtn}
                   onPress={showPassword}
                 >
-                  <Text style={styles.showPasswordBtnTitle}>
+                  <Text style={authCommonStyles.showPasswordBtnTitle}>
                     {passwordVisibleText}
                   </Text>
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
-                style={{ ...styles.registerBtn, width: width - 32 }}
+                style={{ ...authCommonStyles.submitBtn, width: width - 32 }}
                 activeOpacity={0.8}
                 onPress={onSubmit}
               >
-                <Text style={styles.registeretBtnTitle}>
+                <Text style={authCommonStyles.submitBtnTitle}>
                   Зарегистрироваться
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ ...styles.alreadyRegisteretBtn, width: width - 32 }}
+                style={{
+                  ...authCommonStyles.enterRegisterBtn,
+                  width: width - 32,
+                }}
                 activeOpacity={0}
                 onPress={() => navigation.navigate("LoginScreen")}
               >
-                <Text style={styles.alreadyRegisteretBtnTitle}>
+                <Text style={authCommonStyles.enterRegisterBtnTitle}>
                   Уже есть аккаунт? Войти
                 </Text>
               </TouchableOpacity>
@@ -225,25 +193,6 @@ const RegistrationScreen = ({ navigation }) => {
 export default RegistrationScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "contain",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-
-  form: {
-    width: "100%",
-    backgroundColor: "#ffffff",
-    borderTopEndRadius: 25,
-    borderTopStartRadius: 25,
-    alignItems: "center",
-  },
   addPhoto: {
     width: 120,
     height: 120,
@@ -257,55 +206,5 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     transform: [{ translateY: -14 }, { translateX: 12.5 }],
-  },
-  formTitle: {
-    fontFamily: "Roboto-Medium",
-    fontSize: 30,
-    lineHeight: 35,
-    letterSpacing: 0.01,
-    marginTop: 92,
-    marginBottom: 32,
-  },
-
-  input: {
-    backgroundColor: "#F6F6F6",
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
-    borderRadius: 8,
-    height: 50,
-    padding: 16,
-    marginLeft: 16,
-    marginRight: 16,
-    marginBottom: 16,
-  },
-  showPasswordBtn: {
-    position: "absolute",
-    right: 0,
-    transform: [{ translateY: 16 }, { translateX: -35 }],
-  },
-  showPasswordBtnTitle: { fontSize: 16, lineHeight: 19 },
-  registerBtn: {
-    marginTop: 43,
-    marginBottom: 16,
-    height: 51,
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  registeretBtnTitle: {
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#ffffff",
-  },
-  alreadyRegisteretBtn: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 45,
-  },
-  alreadyRegisteretBtnTitle: {
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#1B4371",
   },
 });
