@@ -15,6 +15,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { authCommonStyles } from "./authCommonStyles";
 import { ScreensCommonStyles, colors } from "../ScreensCommonStyles";
+import { Heading } from "native-base";
+import useRoute from "../../router/router";
 
 const initialState = {
   email: "",
@@ -48,6 +50,7 @@ const LoginScreen = () => {
     keyboardHide();
     console.log(state);
     setState(initialState);
+ navigation.navigate('HomeScreen')
   };
 
   const keyboardHide = () => {
@@ -80,7 +83,7 @@ const LoginScreen = () => {
                 marginBottom: isShowKeyboard ? -220 : 0,
               }}
             >
-              <Text style={authCommonStyles.formTitle}>Войти</Text>
+              <Heading style={authCommonStyles.formTitle}>Войти</Heading>
               <TextInput
                 style={{ ...authCommonStyles.input, width: width - 32 }}
                 placeholder="Адрес электронной почты"
@@ -115,11 +118,15 @@ const LoginScreen = () => {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
-                style={{ ...authCommonStyles.submitBtn, width: width - 32 }}
+                style={{
+                  ...ScreensCommonStyles.submitBtn,
+                  marginTop: 43,
+                  width: width - 32,
+                }}
                 activeOpacity={0.8}
                 onPress={onSubmit}
               >
-                <Text style={authCommonStyles.submitBtnTitle}>Войти</Text>
+                <Text style={ScreensCommonStyles.submitBtnTitle}>Войти</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{

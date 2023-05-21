@@ -16,11 +16,7 @@ export const authCommonStyles = StyleSheet.create({
     alignItems: "center",
   },
   formTitle: {
-    fontFamily: "Roboto-Medium",
-    color: "#212121",
     fontSize: 30,
-    lineHeight: 35,
-    letterSpacing: 0.01,
     marginTop: 32,
     marginBottom: 32,
   },
@@ -42,20 +38,7 @@ export const authCommonStyles = StyleSheet.create({
     transform: [{ translateY: 16 }, { translateX: -35 }],
   },
   showPasswordBtnTitle: { fontSize: 16, lineHeight: 19 },
-  submitBtn: {
-    marginTop: 43,
-    marginBottom: 16,
-    height: 51,
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  submitBtnTitle: {
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#ffffff",
-  },
+
   enterRegisterBtn: {
     alignItems: "center",
     justifyContent: "center",

@@ -13,6 +13,7 @@ import {
   Keyboard,
   Image,
 } from "react-native";
+import { Heading } from "native-base";
 import AddPhotoSvg from "../../Components/AddPhotoSvg";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
@@ -50,19 +51,6 @@ const RegistrationScreen = () => {
       setImage(result.assets[0].uri);
     }
   };
-
-  // useEffect(() => {
-  //   const hideSubscription = Keyboard.addListener(
-  //     Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-  //     () => {
-  //       setisShowKeyboard(false);
-  //     }
-  //   );
-
-  //   return () => {
-  //     hideSubscription.remove();
-  //   };
-  // }, []);
 
   const onSubmit = () => {
     keyboardHide();
@@ -114,9 +102,9 @@ const RegistrationScreen = () => {
                   <AddPhotoSvg />
                 </TouchableOpacity>
               </View>
-              <Text style={{ ...authCommonStyles.formTitle, marginTop: 92 }}>
+              <Heading style={{ ...authCommonStyles.formTitle, marginTop: 92 }}>
                 Регистрация
-              </Text>
+              </Heading>
               <TextInput
                 style={{ ...authCommonStyles.input, width: width - 32 }}
                 placeholder="Логин"
@@ -162,11 +150,15 @@ const RegistrationScreen = () => {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
-                style={{ ...authCommonStyles.submitBtn, width: width - 32 }}
+                style={{
+                  ...ScreensCommonStyles.submitBtn,
+                  marginTop: 43,
+                  width: width - 32,
+                }}
                 activeOpacity={0.8}
                 onPress={onSubmit}
               >
-                <Text style={authCommonStyles.submitBtnTitle}>
+                <Text style={ScreensCommonStyles.submitBtnTitle}>
                   Зарегистрироваться
                 </Text>
               </TouchableOpacity>

@@ -9,8 +9,8 @@ import HomeScreen from "../Screens/HomeScreen";
 const AuthStack = createNativeStackNavigator(); // указывает на группу навигаторов
 const HomeStack = createNativeStackNavigator()
 
-const useRoute = (isAuth) => {
-  if (!isAuth) {
+const useRoute = () => {
+
     return (
       <AuthStack.Navigator initialRouteName="RegistrationScreen">
         <AuthStack.Screen
@@ -27,14 +27,14 @@ const useRoute = (isAuth) => {
             headerShown: false,
           }}
         />
+        <AuthStack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
       </AuthStack.Navigator>
     );
   }
-  return (
-    <HomeStack.Navigator initialRouteName="HomeScreen">
-      <HomeStack.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
-    </HomeStack.Navigator>
-  );
-};
+
 
 export default useRoute;

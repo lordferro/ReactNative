@@ -1,7 +1,8 @@
 export const TextStyles = {
   style: {
     fontFamily: "Roboto-Regular",
-    color: "red",
+    color: '#212121',
+    fontSize: 16,
   },
 };
 
