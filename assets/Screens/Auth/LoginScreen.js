@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { authCommonStyles } from "./authCommonStyles";
 import { ScreensCommonStyles, colors } from "../ScreensCommonStyles";
 import { Heading } from "native-base";
-import useRoute from "../../router/router";
+
 
 const initialState = {
   email: "",

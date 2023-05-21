@@ -13,12 +13,12 @@ export default function App() {
     "Roboto-Regular": require("./assets/Fonts/Roboto-Regular.ttf"),
   });
   // set global text styles
+  
+    if (!fontLoaded) {
+      return null;
+    }
   setCustomText(TextStyles);
   const routing = useRoute();
-
-  if (!fontLoaded) {
-    return null;
-  }
 
   return (
     <NativeBaseProvider theme={theme}>

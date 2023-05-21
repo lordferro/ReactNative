@@ -5,9 +5,7 @@ import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import HomeScreen from "../Screens/HomeScreen";
 
-
 const AuthStack = createNativeStackNavigator(); // указывает на группу навигаторов
-const HomeStack = createNativeStackNavigator()
 
 const useRoute = () => {
 

@@ -7,6 +7,10 @@ import { Feather, EvilIcons } from "@expo/vector-icons";
 import Squares from "../img/squaresSVG";
 import { colors } from "./ScreensCommonStyles";
 import { useNavigation } from "@react-navigation/native";
+import { getHeaderTitle } from "@react-navigation/elements";
+import { Entypo } from "@expo/vector-icons";
+import { Text, View } from "react-native";
+import { Heading } from "native-base";
 
 const MainTab = createBottomTabNavigator();
 
@@ -35,7 +39,29 @@ const HomeScreen = () => {
         component={PostsScreen}
         options={{
           tabBarIcon: ({ color }) => <Squares color={color} />,
-          tabBarIconStyle: {},
+          headerStyle: {
+            display: "flex",
+            flexDirection: "row",
+            height: 88,
+            justifyContent: "center",
+            alignItems: "flex-end",
+            borderBottomWidth: 1,
+            borderBottomColor: colors.placeholderTextColor,
+          },
+          header: ({ route, options }) => {
+            const title = getHeaderTitle(options, route.name);
+            return (
+              <View style={options.headerStyle}>
+                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+                <Entypo
+                  style={{ position: "relative", left: 100, top: -2 }}
+                  name="log-out"
+                  size={24}
+                  color={colors.placeholderTextColor}
+                />
+              </View>
+            );
+          },
         }}
       />
       <MainTab.Screen
@@ -45,8 +71,23 @@ const HomeScreen = () => {
           tabBarIcon: ({ color }) => (
             <Feather title="Go somewhere" name="plus" size={24} color={color} />
           ),
-          tabBarIconStyle: {},
-          tabBarStyle:{display:'none'}
+          tabBarStyle: { display: "none" },
+          headerStyle: {
+            display: "flex",
+            height: 88,
+            justifyContent: "flex-end",
+            alignItems: "center",
+            borderBottomWidth: 1,
+            borderBottomColor: colors.placeholderTextColor,
+          },
+          header: ({ route, options }) => {
+            const title = getHeaderTitle(options, route.name);
+            return (
+              <View style={options.headerStyle}>
+                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+              </View>
+            );
+          },
         }}
       />
       <MainTab.Screen
@@ -56,7 +97,22 @@ const HomeScreen = () => {
           tabBarIcon: ({ color }) => (
             <Feather name="user" size={24} color={color} />
           ),
-          tabBarIconStyle: {},
+          headerStyle: {
+            display: "flex",
+            height: 88,
+            justifyContent: "flex-end",
+            alignItems: "center",
+            borderBottomWidth: 1,
+            borderBottomColor: colors.placeholderTextColor,
+          },
+          header: ({ route, options }) => {
+            const title = getHeaderTitle(options, route.name);
+            return (
+              <View style={options.headerStyle}>
+                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+              </View>
+            );
+          },
         }}
       />
     </MainTab.Navigator>
