@@ -38,7 +38,7 @@ const RegistrationScreen = ({ route }) => {
 
   useEffect(() => {
     if (route.params) {
-      setImage(route.params.snap);
+      setImage(route.params.params.snap);
     }
   }, [route.params]);
 
@@ -61,23 +61,27 @@ const RegistrationScreen = ({ route }) => {
   };
 
   const onSubmit = () => {
-    keyboardHide();
+    Keyboard.dismiss();
     console.log(state);
     setState(initialState);
   };
 
-  const keyboardHide = () => {
-    Keyboard.dismiss();
-  };
-
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
       <ImageBackground
         resizeMode="cover"
         style={{ flex: 1, justifyContent: "flex-end" }}
         source={require("../../img/Photo_BG.jpg")}
       >
-        <TouchableWithoutFeedback onPress={keyboardHide}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}
+        >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : ""}
           >

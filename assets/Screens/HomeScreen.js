@@ -11,16 +11,23 @@ import { getHeaderTitle } from "@react-navigation/elements";
 import { Entypo } from "@expo/vector-icons";
 import { Dimensions, StatusBar, Text, View } from "react-native";
 import { Heading } from "native-base";
+import { useEffect } from "react";
 
 const MainTab = createBottomTabNavigator();
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
   const {height} = Dimensions.get('window')
   const navigation = useNavigation();
+  
+  useEffect(() => {
+      console.log(route.params)
+  
+    },[route.params]);
 
   return (
     <MainTab.Navigator
       screenOptions={{
+        unmountOnBlur: true,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#fff",
         tabBarActiveBackgroundColor: `${colors.accentColor}`,
@@ -36,7 +43,7 @@ const HomeScreen = () => {
       }}
     >
       <MainTab.Screen
-        name="Создать публикацию"
+        name="CreatePost"
         component={CreatePostsScreen}
         options={{
           tabBarIcon: ({ color }) => (
@@ -55,18 +62,17 @@ const HomeScreen = () => {
             borderBottomWidth: 1,
             borderBottomColor: colors.placeholderTextColor,
           },
-          header: ({ route, options }) => {
-            const title = getHeaderTitle(options, route.name);
-            return (
+          header: ({  options }) => {
+                       return (
               <View style={options.headerStyle}>
-                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+                <Heading style={{ fontSize: 17 }}>Create post</Heading>
               </View>
             );
           },
         }}
       />
       <MainTab.Screen
-        name="Публикации"
+        name="Posts"
         component={PostsScreen}
         options={{
           tabBarIcon: ({ color }) => <Squares color={color} />,
@@ -82,11 +88,11 @@ const HomeScreen = () => {
             borderBottomWidth: 1,
             borderBottomColor: colors.placeholderTextColor,
           },
-          header: ({ route, options }) => {
-            const title = getHeaderTitle(options, route.name);
+          header: ({  options }) => {
+         
             return (
               <View style={options.headerStyle}>
-                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+                <Heading style={{ fontSize: 17 }}>Posts</Heading>
                 <Entypo
                   style={{ position: "relative", left: 100, top: -2 }}
                   name="log-out"
@@ -99,7 +105,7 @@ const HomeScreen = () => {
         }}
       />
       <MainTab.Screen
-        name="Профиль"
+        name="Profile"
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color }) => (
@@ -116,11 +122,10 @@ const HomeScreen = () => {
             borderBottomWidth: 1,
             borderBottomColor: colors.placeholderTextColor,
           },
-          header: ({ route, options }) => {
-            const title = getHeaderTitle(options, route.name);
-            return (
+          header: ({  options }) => {
+                      return (
               <View style={options.headerStyle}>
-                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+                <Heading style={{ fontSize: 17 }}>Profile</Heading>
               </View>
             );
           },
