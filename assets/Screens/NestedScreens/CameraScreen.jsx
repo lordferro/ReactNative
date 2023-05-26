@@ -1,12 +1,12 @@
 import { Camera, CameraType } from "expo-camera";
-import { Box, Factory, HStack, IconButton, Image, Text } from "native-base";
-import { Entypo, Ionicons, AntDesign, Feather } from "@expo/vector-icons";
+import { Box, Factory, HStack,  Image } from "native-base";
+import { Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import usePreviousRouteName from "../../utils/GetPreviousScreen";
 import { IconBtnTransparent } from "../../Components/IconBtnTransparent";
 
-export const CameraScreen = ({ navigation, route }) => {
+export const CameraScreen = ({ navigation }) => {
   const [cameraReady, setCameraReady] = useState(false);
   const [snap, setSnap] = useState("");
   const [type, setType] = useState(CameraType.back);

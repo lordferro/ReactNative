@@ -3,26 +3,18 @@ import PostsScreen from "../Screens/mainScreens/PostsScreen";
 import CreatePostsScreen from "../Screens/mainScreens/CreatePostsScreen";
 import ProfileScreen from "../Screens/mainScreens/ProfileScreen";
 // icons
-import { Feather, EvilIcons } from "@expo/vector-icons";
+import { Feather} from "@expo/vector-icons";
 import Squares from "../img/squaresSVG";
 import { colors } from "./ScreensCommonStyles";
-import { useNavigation } from "@react-navigation/native";
-import { getHeaderTitle } from "@react-navigation/elements";
 import { Entypo } from "@expo/vector-icons";
-import { Dimensions, StatusBar, Text, View } from "react-native";
+import { Dimensions, StatusBar,  View } from "react-native";
 import { Heading } from "native-base";
-import { useEffect } from "react";
+
 
 const MainTab = createBottomTabNavigator();
 
-const HomeScreen = ({route}) => {
-  const {height} = Dimensions.get('window')
-  const navigation = useNavigation();
-  
-  useEffect(() => {
-      console.log(route.params)
-  
-    },[route.params]);
+const HomeScreen = () => {
+  const { height } = Dimensions.get("window");
 
   return (
     <MainTab.Navigator
@@ -62,8 +54,8 @@ const HomeScreen = ({route}) => {
             borderBottomWidth: 1,
             borderBottomColor: colors.placeholderTextColor,
           },
-          header: ({  options }) => {
-                       return (
+          header: ({ options }) => {
+            return (
               <View style={options.headerStyle}>
                 <Heading style={{ fontSize: 17 }}>Create post</Heading>
               </View>
@@ -88,8 +80,7 @@ const HomeScreen = ({route}) => {
             borderBottomWidth: 1,
             borderBottomColor: colors.placeholderTextColor,
           },
-          header: ({  options }) => {
-         
+          header: ({ options }) => {
             return (
               <View style={options.headerStyle}>
                 <Heading style={{ fontSize: 17 }}>Posts</Heading>
@@ -122,8 +113,8 @@ const HomeScreen = ({route}) => {
             borderBottomWidth: 1,
             borderBottomColor: colors.placeholderTextColor,
           },
-          header: ({  options }) => {
-                      return (
+          header: ({ options }) => {
+            return (
               <View style={options.headerStyle}>
                 <Heading style={{ fontSize: 17 }}>Profile</Heading>
               </View>
