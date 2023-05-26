@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import HomeScreen from "../Screens/HomeScreen";
+import { CameraScreen } from "../Screens/NestedScreens/CameraScreen";
 
 const AuthStack = createNativeStackNavigator(); // указывает на группу навигаторов
 
@@ -28,6 +29,11 @@ const useRoute = () => {
         <AuthStack.Screen
           name="HomeScreen"
           component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <AuthStack.Screen
+          name="CameraScreen"
+          component={CameraScreen}
           options={{ headerShown: false }}
         />
       </AuthStack.Navigator>

@@ -9,12 +9,13 @@ import { colors } from "./ScreensCommonStyles";
 import { useNavigation } from "@react-navigation/native";
 import { getHeaderTitle } from "@react-navigation/elements";
 import { Entypo } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Dimensions, StatusBar, Text, View } from "react-native";
 import { Heading } from "native-base";
 
 const MainTab = createBottomTabNavigator();
 
 const HomeScreen = () => {
+  const {height} = Dimensions.get('window')
   const navigation = useNavigation();
 
   return (
@@ -35,6 +36,36 @@ const HomeScreen = () => {
       }}
     >
       <MainTab.Screen
+        name="Создать публикацию"
+        component={CreatePostsScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Feather title="Go somewhere" name="plus" size={24} color={color} />
+          ),
+          tabBarStyle: { display: "none" },
+          headerStyle: {
+            display: "flex",
+            height:
+              Platform.OS === "android"
+                ? StatusBar.currentHeight + height * 0.07
+                : StatusBar.currentHeight + height * 0.07,
+
+            justifyContent: "flex-end",
+            alignItems: "center",
+            borderBottomWidth: 1,
+            borderBottomColor: colors.placeholderTextColor,
+          },
+          header: ({ route, options }) => {
+            const title = getHeaderTitle(options, route.name);
+            return (
+              <View style={options.headerStyle}>
+                <Heading style={{ fontSize: 17 }}>{title}</Heading>
+              </View>
+            );
+          },
+        }}
+      />
+      <MainTab.Screen
         name="Публикации"
         component={PostsScreen}
         options={{
@@ -42,7 +73,10 @@ const HomeScreen = () => {
           headerStyle: {
             display: "flex",
             flexDirection: "row",
-            height: 88,
+            height:
+              Platform.OS === "android"
+                ? StatusBar.currentHeight + height * 0.07
+                : StatusBar.currentHeight + height * 0.07,
             justifyContent: "center",
             alignItems: "flex-end",
             borderBottomWidth: 1,
@@ -65,32 +99,6 @@ const HomeScreen = () => {
         }}
       />
       <MainTab.Screen
-        name="Создать публикацию"
-        component={CreatePostsScreen}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Feather title="Go somewhere" name="plus" size={24} color={color} />
-          ),
-          tabBarStyle: { display: "none" },
-          headerStyle: {
-            display: "flex",
-            height: 88,
-            justifyContent: "flex-end",
-            alignItems: "center",
-            borderBottomWidth: 1,
-            borderBottomColor: colors.placeholderTextColor,
-          },
-          header: ({ route, options }) => {
-            const title = getHeaderTitle(options, route.name);
-            return (
-              <View style={options.headerStyle}>
-                <Heading style={{ fontSize: 17 }}>{title}</Heading>
-              </View>
-            );
-          },
-        }}
-      />
-      <MainTab.Screen
         name="Профиль"
         component={ProfileScreen}
         options={{
@@ -99,7 +107,10 @@ const HomeScreen = () => {
           ),
           headerStyle: {
             display: "flex",
-            height: 88,
+            height:
+              Platform.OS === "android"
+                ? StatusBar.currentHeight + height * 0.07
+                : StatusBar.currentHeight + height * 0.07,
             justifyContent: "flex-end",
             alignItems: "center",
             borderBottomWidth: 1,

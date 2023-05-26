@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ImageBackground,
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-  KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import {
+  Heading,
+  KeyboardAvoidingView,
+  VStack,
+  Input,
+  Pressable,
+  Icon,
+  Button,
+  Link,
+} from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { authCommonStyles } from "./authCommonStyles";
-import { ScreensCommonStyles, colors } from "../ScreensCommonStyles";
-import { Heading } from "native-base";
-
+import { MaterialIcons } from "@expo/vector-icons/build/Icons";
 
 const initialState = {
   email: "",
@@ -26,130 +26,108 @@ const initialState = {
 const LoginScreen = () => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
-  const [passwordVisibleText, setPasswordVisibleText] = useState("Показать");
-  const [isShowKeyboard, setisShowKeyboard] = useState(false);
-
-  const { height, width } = useWindowDimensions();
-
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const hideSubscription = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      () => {
-        setisShowKeyboard(false);
-      }
-    );
-
-    return () => {
-      hideSubscription.remove();
-    };
-  }, []);
 
   const onSubmit = () => {
     keyboardHide();
     console.log(state);
     setState(initialState);
- navigation.navigate('HomeScreen')
   };
 
   const keyboardHide = () => {
-    setisShowKeyboard(false);
     Keyboard.dismiss();
-  };
-
-  const showPassword = (e) => {
-    if (passwordVisibleText === "Показать") {
-      setPasswordVisibleText("Скрыть");
-    } else {
-      setPasswordVisibleText("Показать");
-    }
-    setPasswordVisible((prevState) => !prevState);
   };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={ScreensCommonStyles.container}>
-        <ImageBackground
-          style={authCommonStyles.backgroundImage}
-          source={require("../../img/Photo_BG.jpg")}
-        >
+      <ImageBackground
+        resizeMode="cover"
+        style={{ flex: 1, justifyContent: "flex-end" }}
+        source={require("../../img/Photo_BG.jpg")}
+      >
+        <TouchableWithoutFeedback onPress={keyboardHide}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : ""}
           >
-            <View
-              style={{
-                ...authCommonStyles.form,
-                marginBottom: isShowKeyboard ? -220 : 0,
-              }}
+            <VStack
+              px="16px"
+
+              alignItems="center"
+              bg={"white"}
+              borderTopRadius={25}
             >
-              <Heading style={authCommonStyles.formTitle}>Войти</Heading>
-              <TextInput
-                style={{ ...authCommonStyles.input, width: width - 32 }}
-                placeholder="Адрес электронной почты"
-                placeholderTextColor={colors.placeholderTextColor}
+              <Heading fontSize="30" mt="32px">
+                Log in
+              </Heading>
+
+              <Input
+                mt="16px"
+                size="text"
+                variant="mainInput"
+                placeholder="Email"
                 value={state.email}
-                onFocus={() => setisShowKeyboard(true)}
                 onChangeText={(value) =>
                   setState((prevState) => ({ ...prevState, email: value }))
                 }
                 onSubmitEditing={onSubmit}
-              ></TextInput>
-              <View>
-                <TextInput
-                  secureTextEntry={passwordVisible}
-                  style={{ ...authCommonStyles.input, width: width - 32 }}
-                  placeholder="Пароль"
-                  placeholderTextColor={colors.placeholderTextColor}
-                  value={state.password}
-                  onFocus={() => setisShowKeyboard(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
-                  onSubmitEditing={onSubmit}
-                ></TextInput>
-                <TouchableOpacity
-                  style={authCommonStyles.showPasswordBtn}
-                  onPress={showPassword}
-                >
-                  <Text style={authCommonStyles.showPasswordBtnTitle}>
-                    {passwordVisibleText}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                style={{
-                  ...ScreensCommonStyles.submitBtn,
-                  marginTop: 43,
-                  width: width - 32,
+              ></Input>
+
+              <Input
+                mt="16px"
+                size="text"
+                variant="mainInput"
+                placeholder="Password"
+                value={state.password}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, password: value }))
+                }
+                onSubmitEditing={onSubmit}
+                type={passwordVisible ? "password" : "text"}
+                InputRightElement={
+                  <Pressable
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                  >
+                    <Icon
+                      as={
+                        <MaterialIcons
+                          name={
+                            passwordVisible ? "visibility-off" : "visibility"
+                          }
+                        />
+                      }
+                      size={5}
+                      mr="2"
+                      color="muted.400"
+                    />
+                  </Pressable>
+                }
+              />
+              <Button
+                onPress={() => {
+                  navigation.navigate("HomeScreen");
                 }}
-                activeOpacity={0.8}
-                onPress={onSubmit}
+                mt="43px"
+                size="text"
+                variant="submitBtn"
+                w="100%"
               >
-                <Text style={ScreensCommonStyles.submitBtnTitle}>Войти</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  ...authCommonStyles.enterRegisterBtn,
-                  width: width - 32,
-                  marginBottom: 111,
-                }}
+                Log in
+              </Button>
+              <Link
+                mt="16px"
+                mb={10}
+                _text={{ fontSize: "16px" }}
                 activeOpacity={0}
                 onPress={() => navigation.navigate("RegistrationScreen")}
               >
-                <Text style={authCommonStyles.enterRegisterBtnTitle}>
-                  Нет аккаунта?{" "}
-                  <Text style={{ color: "red" }}>Зарегистрироваться</Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
+                Not registered? Register.
+              </Link>
+            </VStack>
           </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
+        </TouchableWithoutFeedback>
+      </ImageBackground>
     </TouchableWithoutFeedback>
   );
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({});

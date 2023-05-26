@@ -1,10 +1,12 @@
 import React from "react";
+import { TouchableOpacity } from "react-native";
+import { Touchable } from "react-native";
 import { View, Text, StyleSheet } from "react-native";
 
 const PostsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Posts</Text>
+      <TouchableOpacity><Text>Posts</Text></TouchableOpacity>
     </View>
   );
 };

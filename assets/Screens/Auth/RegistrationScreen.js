@@ -1,55 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ImageBackground,
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-  KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  Image,
+  Alert,
 } from "react-native";
-import { Heading } from "native-base";
-import AddPhotoSvg from "../../Components/AddPhotoSvg";
-import * as ImagePicker from "expo-image-picker";
+import {
+  Box,
+  Heading,
+  KeyboardAvoidingView,
+  Image,
+  VStack,
+  IconButton,
+  AddIcon,
+  Input,
+  Pressable,
+  Icon,
+  Button,
+  Link,
+} from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { authCommonStyles } from "./authCommonStyles";
-import { ScreensCommonStyles, colors } from "../ScreensCommonStyles";
+import { GetImage } from "../../utils/ImagePicker";
+import { MaterialIcons } from "@expo/vector-icons/build/Icons";
 
 const initialState = {
-  login: "",
+  name: "",
   email: "",
   password: "",
 };
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ route }) => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
-  const [passwordVisibleText, setPasswordVisibleText] = useState("Показать");
-  const [isShowKeyboard, setisShowKeyboard] = useState(false);
-  const { height, width } = useWindowDimensions();
   const [image, setImage] = useState(null);
-
   const navigation = useNavigation();
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
+  useEffect(() => {
+    if (route.params) {
+      setImage(route.params.snap);
     }
+  }, [route.params]);
+
+  const pickImageHandler = () => {
+    Alert.alert("", "Do you want to change the profile photo?", [
+      {
+        text: "Camera",
+
+        onPress: () => {
+          navigation.navigate("CameraScreen");
+        },
+      },
+      {
+        text: "Gallery",
+        onPress: () => {
+          GetImage(setImage);
+        },
+      },
+    ]);
   };
 
   const onSubmit = () => {
@@ -59,144 +67,132 @@ const RegistrationScreen = () => {
   };
 
   const keyboardHide = () => {
-    setisShowKeyboard(false);
     Keyboard.dismiss();
-  };
-
-  const showPassword = (e) => {
-    if (passwordVisibleText === "Показать") {
-      setPasswordVisibleText("Скрыть");
-    } else {
-      setPasswordVisibleText("Показать");
-    }
-    setPasswordVisible((prevState) => !prevState);
   };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={ScreensCommonStyles.container}>
-        <ImageBackground
-          style={authCommonStyles.backgroundImage}
-          source={require("../../img/Photo_BG.jpg")}
-        >
+      <ImageBackground
+        resizeMode="cover"
+        style={{ flex: 1, justifyContent: "flex-end" }}
+        source={require("../../img/Photo_BG.jpg")}
+      >
+        <TouchableWithoutFeedback onPress={keyboardHide}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : ""}
           >
-            <View
-              style={{
-                ...authCommonStyles.form,
-                marginBottom: isShowKeyboard ? -160 : 0,
-              }}
+            <VStack
+              px="16px"
+              alignItems="center"
+              bg={"white"}
+              borderTopRadius={25}
             >
-              <View style={styles.addPhoto}>
+              <Box
+                position="absolute"
+                w={120}
+                h={120}
+                top="-12.5%"
+                bg="inactiveColor"
+                borderRadius={16}
+              >
                 {image && (
                   <Image
+                    borderRadius={16}
+                    w={120}
+                    h={120}
+                    alt="User avatar"
                     source={{ uri: image }}
-                    style={{ width: 120, height: 120, borderRadius: 16 }}
                   />
                 )}
-                <TouchableOpacity
-                  style={styles.addPhotoBtn}
-                  onPress={pickImage}
-                >
-                  <AddPhotoSvg />
-                </TouchableOpacity>
-              </View>
-              <Heading style={{ ...authCommonStyles.formTitle, marginTop: 92 }}>
-                Регистрация
+                <IconButton
+                  position="absolute"
+                  bottom="12.5%"
+                  right="-12.5%"
+                  width={25}
+                  h={25}
+                  borderWidth={1}
+                  borderColor="accent"
+                  borderRadius="full"
+                  _icon={{ color: "accent" }}
+                  icon={<AddIcon />}
+                  onPress={pickImageHandler}
+                />
+              </Box>
+              <Heading fontSize="30" mt={92}>
+                Registration
               </Heading>
-              <TextInput
-                style={{ ...authCommonStyles.input, width: width - 32 }}
-                placeholder="Логин"
-                placeholderTextColor={colors.placeholderTextColor}
-                value={state.login}
-                onFocus={() => setisShowKeyboard(true)}
+              <Input
+                mt="32px"
+                size="text"
+                variant="mainInput"
+                placeholder="Full name"
+                value={state.name}
                 onChangeText={(value) =>
-                  setState((prevState) => ({ ...prevState, login: value }))
+                  setState((prevState) => ({ ...prevState, name: value }))
                 }
                 onSubmitEditing={onSubmit}
-              ></TextInput>
-              <TextInput
-                style={{ ...authCommonStyles.input, width: width - 32 }}
-                placeholder="Адрес электронной почты"
-                placeholderTextColor={colors.placeholderTextColor}
+              ></Input>
+
+              <Input
+                mt="16px"
+                size="text"
+                variant="mainInput"
+                placeholder="Email"
                 value={state.email}
-                onFocus={() => setisShowKeyboard(true)}
                 onChangeText={(value) =>
                   setState((prevState) => ({ ...prevState, email: value }))
                 }
                 onSubmitEditing={onSubmit}
-              ></TextInput>
-              <View>
-                <TextInput
-                  secureTextEntry={passwordVisible}
-                  style={{ ...authCommonStyles.input, width: width - 32 }}
-                  placeholder="Пароль"
-                  placeholderTextColor={colors.placeholderTextColor}
-                  value={state.password}
-                  onFocus={() => setisShowKeyboard(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
-                  onSubmitEditing={onSubmit}
-                ></TextInput>
-                <TouchableOpacity
-                  style={authCommonStyles.showPasswordBtn}
-                  onPress={showPassword}
-                >
-                  <Text style={authCommonStyles.showPasswordBtnTitle}>
-                    {passwordVisibleText}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                style={{
-                  ...ScreensCommonStyles.submitBtn,
-                  marginTop: 43,
-                  width: width - 32,
-                }}
-                activeOpacity={0.8}
-                onPress={onSubmit}
-              >
-                <Text style={ScreensCommonStyles.submitBtnTitle}>
-                  Зарегистрироваться
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  ...authCommonStyles.enterRegisterBtn,
-                  width: width - 32,
-                }}
+              ></Input>
+
+              <Input
+                mt="16px"
+                size="text"
+                variant="mainInput"
+                placeholder="Password"
+                value={state.password}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, password: value }))
+                }
+                onSubmitEditing={onSubmit}
+                type={passwordVisible ? "password" : "text"}
+                InputRightElement={
+                  <Pressable
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                  >
+                    <Icon
+                      as={
+                        <MaterialIcons
+                          name={
+                            passwordVisible ? "visibility-off" : "visibility"
+                          }
+                        />
+                      }
+                      size={5}
+                      mr="2"
+                      color="muted.400"
+                    />
+                  </Pressable>
+                }
+              />
+              <Button mt="43px" size="text" variant="submitBtn" w="100%">
+                Register
+              </Button>
+              <Link
+                mt="16px"
+                mb={10}
+                _text={{ fontSize: "16px" }}
                 activeOpacity={0}
                 onPress={() => navigation.navigate("LoginScreen")}
               >
-                <Text style={authCommonStyles.enterRegisterBtnTitle}>
-                  Уже есть аккаунт? Войти
-                </Text>
-              </TouchableOpacity>
-            </View>
+                Already registered? Log in.
+              </Link>
+            </VStack>
           </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
+        </TouchableWithoutFeedback>
+      </ImageBackground>
     </TouchableWithoutFeedback>
   );
 };
 
 export default RegistrationScreen;
-
-const styles = StyleSheet.create({
-  addPhoto: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    position: "absolute",
-    transform: [{ translateY: -60 }],
-  },
-  addPhotoBtn: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    transform: [{ translateY: -14 }, { translateX: 12.5 }],
-  },
-});
