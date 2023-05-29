@@ -6,6 +6,7 @@ import * as MediaLibrary from "expo-media-library";
 import usePreviousRouteName from "../../utils/GetPreviousScreen";
 import { IconBtnTransparent } from "../../Components/IconBtnTransparent";
 
+
 export const CameraScreen = ({ navigation }) => {
   const [cameraReady, setCameraReady] = useState(false);
   const [snap, setSnap] = useState("");

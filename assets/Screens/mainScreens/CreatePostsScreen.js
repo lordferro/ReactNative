@@ -19,20 +19,34 @@ import {
   VStack,
   useToken,
 } from "native-base";
-import { Dimensions } from "react-native";
 import { GetImage } from "../../utils/ImagePicker";
+import * as Location from "expo-location";
 
 const CreatePostsScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [isDisabled, setIsDisabled] = useState(true);
-  const { width } = Dimensions.get("window");
   const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     if (route.params) {
       setImage(route.params.snap);
     }
   }, [route.params]);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let { coords } = await Location.getCurrentPositionAsync({});
+      setLocation(coords);
+    })();
+  }, []);
 
   const pickImageHandler = () => {
     Alert.alert("", "Do you want to change the profile photo?", [
@@ -70,7 +84,7 @@ const CreatePostsScreen = ({ navigation, route }) => {
                   bg="inactiveColor"
                   source={{ uri: image }}
                   alt=""
-                  width='full'
+                  width="full"
                   h={240}
                 />
               )}

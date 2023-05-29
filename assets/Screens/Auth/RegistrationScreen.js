@@ -115,9 +115,9 @@ const RegistrationScreen = ({ route }) => {
                   width={25}
                   h={25}
                   borderWidth={1}
-                  borderColor="accent"
+                  borderColor="accentColor"
                   borderRadius="full"
-                  _icon={{ color: "accent" }}
+                  _icon={{ color: "accentColor" }}
                   icon={<AddIcon />}
                   onPress={pickImageHandler}
                 />

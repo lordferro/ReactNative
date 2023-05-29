@@ -11,7 +11,7 @@ const AuthStack = createNativeStackNavigator(); // указывает на гр�
 const useRoute = () => {
 
     return (
-      <AuthStack.Navigator initialRouteName="RegistrationScreen">
+      <AuthStack.Navigator initialRouteName="HomeScreen">
         <AuthStack.Screen
           name="RegistrationScreen"
           component={RegistrationScreen}

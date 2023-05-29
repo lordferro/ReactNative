@@ -5,24 +5,29 @@ import ProfileScreen from "../Screens/mainScreens/ProfileScreen";
 // icons
 import { Feather} from "@expo/vector-icons";
 import Squares from "../img/squaresSVG";
-import { colors } from "./ScreensCommonStyles";
 import { Entypo } from "@expo/vector-icons";
 import { Dimensions, StatusBar,  View } from "react-native";
-import { Heading } from "native-base";
+import { Heading, useToken } from "native-base";
 
 
 const MainTab = createBottomTabNavigator();
 
 const HomeScreen = () => {
   const { height } = Dimensions.get("window");
+   const [accentColor, placeholderTextColor] = useToken("colors", [
+     "accentColor",
+     "placeholderTextColor",
+   ]);
+
 
   return (
     <MainTab.Navigator
+      initialRouteName="CreatePost"
       screenOptions={{
         unmountOnBlur: true,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#fff",
-        tabBarActiveBackgroundColor: `${colors.accentColor}`,
+        tabBarActiveBackgroundColor: accentColor,
         tabBarItemStyle: {
           borderRadius: 100,
           width: 70,
@@ -52,7 +57,7 @@ const HomeScreen = () => {
             justifyContent: "flex-end",
             alignItems: "center",
             borderBottomWidth: 1,
-            borderBottomColor: colors.placeholderTextColor,
+            borderBottomColor: placeholderTextColor,
           },
           header: ({ options }) => {
             return (
@@ -78,7 +83,7 @@ const HomeScreen = () => {
             justifyContent: "center",
             alignItems: "flex-end",
             borderBottomWidth: 1,
-            borderBottomColor: colors.placeholderTextColor,
+            borderBottomColor: placeholderTextColor,
           },
           header: ({ options }) => {
             return (
@@ -88,7 +93,7 @@ const HomeScreen = () => {
                   style={{ position: "relative", left: 100, top: -2 }}
                   name="log-out"
                   size={24}
-                  color={colors.placeholderTextColor}
+                  color={placeholderTextColor}
                 />
               </View>
             );
@@ -111,7 +116,7 @@ const HomeScreen = () => {
             justifyContent: "flex-end",
             alignItems: "center",
             borderBottomWidth: 1,
-            borderBottomColor: colors.placeholderTextColor,
+            borderBottomColor: placeholderTextColor,
           },
           header: ({ options }) => {
             return (

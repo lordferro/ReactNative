@@ -19,7 +19,7 @@ const theme = extendTheme({
   },
   colors: {
     standart: "#212121",
-    accent: "#FF6C00",
+    accentColor: "#FF6C00",
     placeholderTextColor: "#BDBDBD",
     inactiveColor: "#F6f6f6",
     borderColor: "#e8e8e8",
@@ -44,7 +44,7 @@ const theme = extendTheme({
       variants: {
         submitBtn: () => {
           return {
-            bg: "accent",
+            bg: "accentColor",
             rounded: "full",
             _text: { color: "white" },
             _disabled: {
@@ -71,7 +71,7 @@ const theme = extendTheme({
           bg: "inactiveColor",
           
 
-          _focus: { bgColor: "white", borderColor: "accent" },
+          _focus: { bgColor: "white", borderColor: "accentColor" },
           _text: { fontSize: "26px" },
         },
       },
