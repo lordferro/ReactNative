@@ -1,28 +1,41 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import PostsScreen from "../Screens/mainScreens/PostsScreen";
-import CreatePostsScreen from "../Screens/mainScreens/CreatePostsScreen";
 import ProfileScreen from "../Screens/mainScreens/ProfileScreen";
 // icons
-import { Feather} from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import Squares from "../img/squaresSVG";
 import { Entypo } from "@expo/vector-icons";
-import { Dimensions, StatusBar,  View } from "react-native";
-import { Heading, useToken } from "native-base";
 
+import { Dimensions, StatusBar, View } from "react-native";
+import { Heading, useToken } from "native-base";
+import CreatePostsStack from "../Screens/mainScreens/CreatePostsScreen";
 
 const MainTab = createBottomTabNavigator();
 
 const HomeScreen = () => {
+  const [accentColor, placeholderTextColor] = useToken("colors", [
+    "accentColor",
+    "placeholderTextColor",
+  ]);
   const { height } = Dimensions.get("window");
-   const [accentColor, placeholderTextColor] = useToken("colors", [
-     "accentColor",
-     "placeholderTextColor",
-   ]);
 
+  const headerStyle = {
+    display: "flex",
+    height:
+      Platform.OS === "android"
+        ? StatusBar.currentHeight + height * 0.07
+        : StatusBar.currentHeight + height * 0.07,
+
+    justifyContent: "flex-end",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: placeholderTextColor,
+  };
 
   return (
     <MainTab.Navigator
       initialRouteName="CreatePost"
+      backBehavior="history"
       screenOptions={{
         unmountOnBlur: true,
         tabBarShowLabel: false,
@@ -41,24 +54,13 @@ const HomeScreen = () => {
     >
       <MainTab.Screen
         name="CreatePost"
-        component={CreatePostsScreen}
+        component={CreatePostsStack}
         options={{
           tabBarIcon: ({ color }) => (
-            <Feather title="Go somewhere" name="plus" size={24} color={color} />
+            <Feather name="plus" size={24} color={color} />
           ),
           tabBarStyle: { display: "none" },
-          headerStyle: {
-            display: "flex",
-            height:
-              Platform.OS === "android"
-                ? StatusBar.currentHeight + height * 0.07
-                : StatusBar.currentHeight + height * 0.07,
-
-            justifyContent: "flex-end",
-            alignItems: "center",
-            borderBottomWidth: 1,
-            borderBottomColor: placeholderTextColor,
-          },
+          headerStyle: headerStyle,
           header: ({ options }) => {
             return (
               <View style={options.headerStyle}>
@@ -73,18 +75,7 @@ const HomeScreen = () => {
         component={PostsScreen}
         options={{
           tabBarIcon: ({ color }) => <Squares color={color} />,
-          headerStyle: {
-            display: "flex",
-            flexDirection: "row",
-            height:
-              Platform.OS === "android"
-                ? StatusBar.currentHeight + height * 0.07
-                : StatusBar.currentHeight + height * 0.07,
-            justifyContent: "center",
-            alignItems: "flex-end",
-            borderBottomWidth: 1,
-            borderBottomColor: placeholderTextColor,
-          },
+          headerStyle: headerStyle,
           header: ({ options }) => {
             return (
               <View style={options.headerStyle}>
@@ -107,17 +98,7 @@ const HomeScreen = () => {
           tabBarIcon: ({ color }) => (
             <Feather name="user" size={24} color={color} />
           ),
-          headerStyle: {
-            display: "flex",
-            height:
-              Platform.OS === "android"
-                ? StatusBar.currentHeight + height * 0.07
-                : StatusBar.currentHeight + height * 0.07,
-            justifyContent: "flex-end",
-            alignItems: "center",
-            borderBottomWidth: 1,
-            borderBottomColor: placeholderTextColor,
-          },
+          headerStyle: headerStyle,
           header: ({ options }) => {
             return (
               <View style={options.headerStyle}>

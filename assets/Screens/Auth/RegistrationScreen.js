@@ -38,7 +38,7 @@ const RegistrationScreen = ({ route }) => {
 
   useEffect(() => {
     if (route.params) {
-      setImage(route.params.params.snap);
+      setImage(route.params.snap);
     }
   }, [route.params]);
 

@@ -51,7 +51,6 @@ const LoginScreen = () => {
           >
             <VStack
               px="16px"
-
               alignItems="center"
               bg={"white"}
               borderTopRadius={25}
@@ -102,15 +101,7 @@ const LoginScreen = () => {
                   </Pressable>
                 }
               />
-              <Button
-                onPress={() => {
-                  navigation.navigate("HomeScreen");
-                }}
-                mt="43px"
-                size="text"
-                variant="submitBtn"
-                w="100%"
-              >
+              <Button mt="43px" size="text" variant="submitBtn" w="100%">
                 Log in
               </Button>
               <Link

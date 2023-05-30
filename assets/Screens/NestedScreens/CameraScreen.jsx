@@ -1,11 +1,10 @@
 import { Camera, CameraType } from "expo-camera";
-import { Box, Factory, HStack,  Image } from "native-base";
+import { Box, Factory, HStack, Image } from "native-base";
 import { Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import usePreviousRouteName from "../../utils/GetPreviousScreen";
 import { IconBtnTransparent } from "../../Components/IconBtnTransparent";
-
 
 export const CameraScreen = ({ navigation }) => {
   const [cameraReady, setCameraReady] = useState(false);
@@ -70,10 +69,7 @@ export const CameraScreen = ({ navigation }) => {
               <IconBtnTransparent
                 onPress={async () => {
                   MediaLibrary.saveToLibraryAsync(snap);
-                  navigation.navigate(prevScreen, {
-                    screen: "CreatePost",
-                    params: { snap },
-                  });
+                  navigation.navigate(prevScreen, { snap });
                 }}
                 IconGroup={AntDesign}
                 name="downcircleo"

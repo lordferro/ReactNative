@@ -1,21 +1,13 @@
-import React from "react";
-import { TouchableOpacity } from "react-native";
-import { Touchable } from "react-native";
-import { View, Text, StyleSheet } from "react-native";
+import { Box } from "native-base";
+import React, { useEffect, useState } from "react";
 
-const PostsScreen = () => {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity><Text>Posts</Text></TouchableOpacity>
-    </View>
-  );
+const PostsScreen = ({ route }) => {
+  const [posts, setPosts] = useState([]);
+  console.log(route.params);
+
+  // useEffect(() => {setPosts((prevState) => [...prevState, route.params])}, [route.params]);
+
+  return <Box flex={1}></Box>;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 export default PostsScreen;
