@@ -34,7 +34,7 @@ const HomeScreen = () => {
 
   return (
     <MainTab.Navigator
-      initialRouteName="CreatePost"
+      initialRouteName="Posts"
       backBehavior="history"
       screenOptions={{
         unmountOnBlur: true,

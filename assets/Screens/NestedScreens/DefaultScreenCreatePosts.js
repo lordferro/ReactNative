@@ -49,14 +49,20 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
   }, [route.params]);
 
   useEffect(() => {
-    if (image && location && title) {
+    if (image && title && location) {
       setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
     }
   }, [image, location, title]);
 
   const clearForm = () => {
     setImage(null);
     setTitle("");
+  };
+
+  const submitHandle = () => {
+    navigation.navigate("Posts", { location, image, title });
   };
 
   return (
@@ -151,7 +157,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               mt={8}
               variant={"submitBtn"}
               isDisabled={isDisabled}
-              // onPress={submitHandle}
+              onPress={submitHandle}
             >
               <Text
                 fontSize={16}

@@ -1,6 +1,8 @@
 import { Box } from "native-base";
 import React, { useEffect, useState } from "react";
 
+// const state = { image, location, title };
+
 const PostsScreen = ({ route }) => {
   const [posts, setPosts] = useState([]);
   console.log(route.params);
