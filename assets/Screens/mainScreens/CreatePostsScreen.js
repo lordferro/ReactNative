@@ -11,12 +11,13 @@ const CreatePostsStack = () => {
       <NestedScreens.Screen
         name="DefaultScreenCreatePosts"
         component={DefaultScreenCreatePosts}
-        options={{ headerShown: false }}
+        // options={{ headerShown: false }}
       />
+
       <NestedScreens.Screen
         name="CameraScreen"
         component={CameraScreen}
-        options={{ headerShown: false }}
+        // options={{ headerShown: false }}
       />
       <NestedScreens.Screen
         name="MapScreen"

@@ -37,7 +37,7 @@ const HomeScreen = () => {
       initialRouteName="Posts"
       backBehavior="history"
       screenOptions={{
-        unmountOnBlur: true,
+        unmountOnBlur: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#fff",
         tabBarActiveBackgroundColor: accentColor,

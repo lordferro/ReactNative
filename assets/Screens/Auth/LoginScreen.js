@@ -14,9 +14,12 @@ import {
   Icon,
   Button,
   Link,
+  Text,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons/build/Icons";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../../redux/auth/authOperations";
 
 const initialState = {
   email: "",
@@ -26,26 +29,25 @@ const initialState = {
 const LoginScreen = () => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
+
   const navigation = useNavigation();
 
+  const dispatch = useDispatch();
+
   const onSubmit = () => {
-    keyboardHide();
-    console.log(state);
+    Keyboard.dismiss();
+    dispatch(authSignInUser(state));
     setState(initialState);
   };
 
-  const keyboardHide = () => {
-    Keyboard.dismiss();
-  };
-
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ImageBackground
         resizeMode="cover"
         style={{ flex: 1, justifyContent: "flex-end" }}
         source={require("../../img/Photo_BG.jpg")}
       >
-        <TouchableWithoutFeedback onPress={keyboardHide}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.hide()}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : ""}
           >
@@ -101,8 +103,15 @@ const LoginScreen = () => {
                   </Pressable>
                 }
               />
-              <Button mt="43px" size="text" variant="submitBtn" w="100%">
-                Log in
+              <Button
+                w="full"
+                mt="43px"
+                variant={"submitBtn"}
+                onPress={onSubmit}
+              >
+                <Text fontSize={16} color={"white"}>
+                  Log in
+                </Text>
               </Button>
               <Link
                 mt="16px"

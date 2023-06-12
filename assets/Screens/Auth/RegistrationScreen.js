@@ -19,10 +19,13 @@ import {
   Icon,
   Button,
   Link,
+  Text,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { GetImage } from "../../utils/ImagePicker";
 import { MaterialIcons } from "@expo/vector-icons/build/Icons";
+import { useDispatch } from "react-redux";
+import { authSignUpUser } from "../../../redux/auth/authOperations";
 
 const initialState = {
   name: "",
@@ -34,7 +37,10 @@ const RegistrationScreen = ({ route }) => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [image, setImage] = useState(null);
+
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (route.params) {
@@ -62,7 +68,7 @@ const RegistrationScreen = ({ route }) => {
 
   const onSubmit = () => {
     Keyboard.dismiss();
-    console.log(state);
+    dispatch(authSignUpUser(state));
     setState(initialState);
   };
 
@@ -179,9 +185,18 @@ const RegistrationScreen = ({ route }) => {
                   </Pressable>
                 }
               />
-              <Button mt="43px" size="text" variant="submitBtn" w="100%">
-                Register
+
+              <Button
+                w="full"
+                mt="43px"
+                variant={"submitBtn"}
+                onPress={onSubmit}
+              >
+                <Text fontSize={16} color={"white"}>
+                  Register
+                </Text>
               </Button>
+
               <Link
                 mt="16px"
                 mb={10}
