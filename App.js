@@ -8,19 +8,38 @@ import { TextStyles } from "./assets/globalStyles";
 import { NativeBaseProvider } from "native-base";
 import theme from "./theme/index";
 import { store } from "./redux/store";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+  getAuth,
+} from "firebase/auth";
+import { auth } from "./firebase/config";
+import { useState } from "react";
 
 export default function App() {
   const [fontLoaded] = useFonts({
     "Roboto-Medium": require("./assets/Fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./assets/Fonts/Roboto-Regular.ttf"),
   });
+  const [user, setUser] = useState(null);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(user);
+    } else {
+      console.log("out");
+    }
+  });
+
+  const routing = useRoute(user);
 
   if (!fontLoaded) {
     return null;
   }
   // set global text styles
   setCustomText(TextStyles);
-  const routing = useRoute(false);
 
   return (
     <NativeBaseProvider theme={theme}>
