@@ -47,7 +47,7 @@ const LoginScreen = () => {
         style={{ flex: 1, justifyContent: "flex-end" }}
         source={require("../../img/Photo_BG.jpg")}
       >
-        <TouchableWithoutFeedback onPress={() => Keyboard.hide()}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : ""}
           >

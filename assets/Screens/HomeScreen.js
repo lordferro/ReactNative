@@ -9,6 +9,8 @@ import { Entypo } from "@expo/vector-icons";
 import { Dimensions, StatusBar, View } from "react-native";
 import { Heading, useToken } from "native-base";
 import CreatePostsStack from "../Screens/mainScreens/CreatePostsScreen";
+import { authSignOutUser } from "../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
 
 const MainTab = createBottomTabNavigator();
 
@@ -18,6 +20,11 @@ const HomeScreen = () => {
     "placeholderTextColor",
   ]);
   const { height } = Dimensions.get("window");
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
 
   const headerStyle = {
     display: "flex",
@@ -85,6 +92,7 @@ const HomeScreen = () => {
                   name="log-out"
                   size={24}
                   color={placeholderTextColor}
+                  onPress={signOut}
                 />
               </View>
             );
