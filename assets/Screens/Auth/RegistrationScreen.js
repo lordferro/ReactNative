@@ -37,7 +37,6 @@ const RegistrationScreen = ({ route }) => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [image, setImage] = useState(null);
-
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
@@ -68,7 +67,7 @@ const RegistrationScreen = ({ route }) => {
 
   const onSubmit = () => {
     Keyboard.dismiss();
-    dispatch(authSignUpUser(state));
+    dispatch(authSignUpUser({ ...state, image }));
     setState(initialState);
   };
 

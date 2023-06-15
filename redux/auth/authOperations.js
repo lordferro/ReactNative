@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { authSlice } from "./authReducer";
+import { sendPhotoToServer } from "../../assets/utils/sendImageToServer";
 
 const { authSignOut, authStateChange, updateUserProfile } = authSlice.actions;
 
@@ -14,24 +15,31 @@ export const authSignInUser =
   async (dispatch, getState) => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(auth.currentUser);
     } catch (error) {
       console.log(error.message);
     }
   };
 
 export const authSignUpUser =
-  ({ email, password, name }) =>
+  ({ email, password, name, image }) =>
   async (dispatch, getState) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
 
-      await updateProfile(auth.currentUser, { displayName: name });
+      const avatarUrl = await sendPhotoToServer(image);
+      
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: avatarUrl,
+      });
       const { uid, displayName } = auth.currentUser;
 
       dispatch(
         updateUserProfile({
           userId: uid,
           name: displayName,
+          photoURL: avatarUrl,
         })
       );
     } catch (error) {
@@ -45,7 +53,6 @@ export const authSignOutUser = () => async (dispatch, getState) => {
 
     dispatch(authSignOut());
 
-    console.log(auth.currentUser);
     console.log("out");
   } catch (error) {
     console.log(error.message);
@@ -54,12 +61,13 @@ export const authSignOutUser = () => async (dispatch, getState) => {
 
 export const authStateChangeUser = () => async (dispatch, getState) => {
   try {
-    auth.onAuthStateChanged((user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(
           updateUserProfile({
             userId: user.uid,
             name: user.displayName,
+            photoURL: user.photoURL,
           })
         );
         dispatch(authStateChange({ stateChange: true }));
