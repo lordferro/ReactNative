@@ -51,6 +51,7 @@ const theme = extendTheme({
               _text: { color: "placeholderTextColor" },
               bg: "inactiveColor",
             },
+            _pressed: { opacity: "0.5" },
             h: 51,
           };
         },

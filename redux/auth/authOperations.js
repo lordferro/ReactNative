@@ -7,7 +7,7 @@ import {
 import { auth } from "../../firebase/config";
 import { authSlice } from "./authReducer";
 import { sendPhotoToServer } from "../../assets/utils/sendImageToServer";
-import { storagePaths } from "../../assets/consts/storagePaths";
+import { storagePaths } from "../../assets/consts/paths";
 
 const { authSignOut, authStateChange, updateUserProfile } = authSlice.actions;
 

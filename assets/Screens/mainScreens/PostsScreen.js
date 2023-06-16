@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 const PostsScreen = ({ route }) => {
   const [posts, setPosts] = useState([]);
 
+  const getAllPosts = async () => {}
+
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [...prevState, route.params]);

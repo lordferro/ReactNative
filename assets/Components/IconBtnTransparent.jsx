@@ -1,12 +1,13 @@
 import { IconButton } from "native-base";
 
-export const IconBtnTransparent = ({ name, onPress, IconGroup }) => {
-    // const Tag = iconGroup
+export const IconBtnTransparent = ({ name, onPress, IconGroup, style, color = 'white', size= 48 }) => {
+
   return (
     <IconButton
+      style = {style}
       onPress={onPress}
       _pressed={{ bg: "transparent" }}
-     icon={ <IconGroup name={name} size={48} color="white"/>}
+     icon={ <IconGroup name={name} size={size} color={color}/>}
     />
   );
 };

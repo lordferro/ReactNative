@@ -4,13 +4,11 @@ import ProfileScreen from "../Screens/mainScreens/ProfileScreen";
 // icons
 import { Feather } from "@expo/vector-icons";
 import Squares from "../img/squaresSVG";
-import { Entypo } from "@expo/vector-icons";
 
 import { Dimensions, StatusBar, View } from "react-native";
 import { Heading, useToken } from "native-base";
 import CreatePostsStack from "../Screens/mainScreens/CreatePostsScreen";
-import { authSignOutUser } from "../../redux/auth/authOperations";
-import { useDispatch } from "react-redux";
+import { LogOutBtn } from "../Components/LogOutBtn";
 
 const MainTab = createBottomTabNavigator();
 
@@ -20,18 +18,13 @@ const HomeScreen = () => {
     "placeholderTextColor",
   ]);
   const { height } = Dimensions.get("window");
-  const dispatch = useDispatch();
-
-  const signOut = () => {
-    dispatch(authSignOutUser());
-  };
 
   const headerStyle = {
     display: "flex",
     height:
       Platform.OS === "android"
         ? StatusBar.currentHeight + height * 0.07
-        : StatusBar.currentHeight + height * 0.07,
+        : StatusBar.currentHeight + height * 0.08,
 
     justifyContent: "flex-end",
     alignItems: "center",
@@ -55,7 +48,7 @@ const HomeScreen = () => {
           marginTop: 9,
           marginHorizontal: 20,
         },
-        tabBarStyle: { height: 83 },
+        tabBarStyle: { height: 60 },
         tabBarHideOnKeyboard: true,
       }}
     >
@@ -66,12 +59,12 @@ const HomeScreen = () => {
           tabBarIcon: ({ color }) => (
             <Feather name="plus" size={24} color={color} />
           ),
-          tabBarStyle: { display: "none" },
           headerStyle: headerStyle,
           header: ({ options }) => {
             return (
               <View style={options.headerStyle}>
                 <Heading style={{ fontSize: 17 }}>Create post</Heading>
+                <LogOutBtn />
               </View>
             );
           },
@@ -87,13 +80,7 @@ const HomeScreen = () => {
             return (
               <View style={options.headerStyle}>
                 <Heading style={{ fontSize: 17 }}>Posts</Heading>
-                <Entypo
-                  style={{ position: "relative", left: 100, top: -2 }}
-                  name="log-out"
-                  size={24}
-                  color={placeholderTextColor}
-                  onPress={signOut}
-                />
+                <LogOutBtn />
               </View>
             );
           },
@@ -111,6 +98,7 @@ const HomeScreen = () => {
             return (
               <View style={options.headerStyle}>
                 <Heading style={{ fontSize: 17 }}>Profile</Heading>
+                <LogOutBtn />
               </View>
             );
           },

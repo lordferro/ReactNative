@@ -17,25 +17,25 @@ import {
   Spinner,
   Text,
   VStack,
+  useToast,
   useToken,
 } from "native-base";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
-import { sendPhotoToServer } from "../../utils/sendImageToServer";
-import { storagePaths } from "../../consts/storagePaths";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../../firebase/config";
+
+import { writeDataToFirestore } from "../../serviceAPI/opereationsWithDB";
 
 const DefaultScreenCreatePosts = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [location, setLocation] = useState(null);
   const [title, setTitle] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
-  const [IsLoadingToServer, setIsLoadingToServer] = useState(false);
   const [isCleared, setisCleared] = useState(false);
   const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
 
   const { userId, name } = useSelector((state) => state.auth);
+
+  const toast = useToast();
 
   useEffect(() => {
     (async () => {
@@ -57,47 +57,28 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
   }, [route.params]);
 
   useEffect(() => {
-    if (image && title && location) {
+    if (image || title || location) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
   }, [image, location, title]);
 
-  const clearForm = () => {
+  function clearForm() {
     setImage(null);
     setTitle("");
     setLocation(null);
     setisCleared(true);
-  };
-
-  const writeDataToFirestore = async () => {
-    try {
-      // setIsLoadingToServer(true);
-      const postPictureUrl = await sendPhotoToServer(
-        storagePaths.postsPictures,
-        image
-      );
-
-      const docRef = await addDoc(collection(db, "posts"), {
-        location: {
-          longitude: location.longitude,
-          latitude: location.latitude,
-        },
-        postPictureUrl,
-        title,
-        userId,
-        name,
-      });
-      console.log(docRef.id);
-      // setIsLoadingToServer(false);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  }
 
   const submitHandle = async () => {
-    writeDataToFirestore();
+    if (!image || !title || !location) {
+      toast.show({
+        description: "Please fill all the fields",
+      });
+      return;
+    }
+    writeDataToFirestore(image, location, title, userId, name);
     clearForm();
     navigation.navigate("Posts");
   };
@@ -195,8 +176,6 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
             <Button
               w="full"
               mt={8}
-              isLoading={IsLoadingToServer}
-              isLoadingText="Publishing..."
               variant={"submitBtn"}
               isDisabled={isDisabled}
               onPress={submitHandle}
@@ -214,7 +193,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               alignSelf="center"
               mt="15%"
               mb={1}
-              isDisabled={IsLoadingToServer || isDisabled}
+              isDisabled={isDisabled}
               onPress={clearForm}
             >
               <FontAwesome
