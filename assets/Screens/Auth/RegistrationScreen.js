@@ -26,6 +26,7 @@ import { GetImage } from "../../utils/ImagePicker";
 import { MaterialIcons } from "@expo/vector-icons/build/Icons";
 import { useDispatch } from "react-redux";
 import { authSignUpUser } from "../../../redux/auth/authOperations";
+import { useSelector } from "react-redux";
 
 const initialState = {
   name: "",
@@ -37,15 +38,16 @@ const RegistrationScreen = ({ route }) => {
   const [state, setState] = useState(initialState);
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [image, setImage] = useState(null);
-  const navigation = useNavigation();
 
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const { photoUri } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (route.params) {
-      setImage(route.params.snap);
+    if (photoUri) {
+      setImage(photoUri);
     }
-  }, [route.params]);
+  }, [photoUri]);
 
   const pickImageHandler = () => {
     Alert.alert("", "Do you want to change the profile photo?", [
@@ -53,7 +55,7 @@ const RegistrationScreen = ({ route }) => {
         text: "Camera",
 
         onPress: () => {
-          navigation.navigate("CameraScreen");
+          navigation.navigate("CameraScreen", { from: "RegistrationScreen" });
         },
       },
       {

@@ -21,17 +21,21 @@ const PostsScreen = ({ route }) => {
   const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
 
   useEffect(() => {
-    const q = query(collection(db, "posts"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const postsDB = [];
-      querySnapshot.forEach((doc) => {
-        if (doc.data().userId === userId) {
-          postsDB.push({ ...doc.data(), id: doc.id });
-          console.log(doc.id);
-        }
+    try {
+      const q = query(collection(db, "posts"));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const postsDB = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.data().userId === userId) {
+            postsDB.push({ ...doc.data(), id: doc.id });
+            console.log(doc.id);
+          }
+        });
+        setPosts(postsDB);
       });
-      setPosts(postsDB);
-    });
+    } catch (error) {
+      console.log(error.message);
+    }
   }, []);
 
   return (
@@ -45,8 +49,7 @@ const PostsScreen = ({ route }) => {
                 <Image
                   borderRadius="8px"
                   alt={item.title}
-                  w="100%"
-                  minW={340}
+                  w={343}
                   h={240}
                   source={{ uri: item.postPictureUrl }}
                 />
@@ -65,7 +68,8 @@ const PostsScreen = ({ route }) => {
               </Text>
             </Box>
           </>
-        )} keyExtractor={item=>item.id}
+        )}
+        keyExtractor={(item) => item.id}
       />
     </VStack>
   );
