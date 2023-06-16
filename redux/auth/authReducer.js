@@ -4,6 +4,7 @@ const state = {
   userId: null,
   name: null,
   stateChange: false,
+  photoUri: "",
 };
 
 const actions = {
@@ -18,6 +19,10 @@ const actions = {
     stateChange: payload.stateChange,
   }),
   authSignOut: () => state,
+  setPhotoUri: (state, { payload }) => ({
+    ...state,
+    photoUri: payload.photoUri,
+  }),
 };
 
 export const authSlice = createSlice({

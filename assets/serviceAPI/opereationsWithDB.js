@@ -25,10 +25,7 @@ export const writeDataToFirestore = async (
     );
 
     const docRef = await addDoc(collection(db, dbPaths.postsCollection), {
-      location: {
-        longitude: location.longitude,
-        latitude: location.latitude,
-      },
+      location,
       address,
       postPictureUrl,
       title,

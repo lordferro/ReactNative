@@ -1,18 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import PostsScreen from "../Screens/mainScreens/PostsScreen";
-import ProfileScreen from "../Screens/mainScreens/ProfileScreen";
+import PostsScreen from "../mainTabScreens/PostsScreen";
+import ProfileScreen from "../mainTabScreens/ProfileScreen";
 // icons
 import { Feather } from "@expo/vector-icons";
-import Squares from "../img/squaresSVG";
+import Squares from "../../img/squaresSVG";
 
 import { Dimensions, StatusBar, View } from "react-native";
 import { Heading, useToken } from "native-base";
-import CreatePostsStack from "../Screens/mainScreens/CreatePostsScreen";
-import { LogOutBtn } from "../Components/LogOutBtn";
+import { LogOutBtn } from "../../Components/LogOutBtn";
+import CreatePostsScreen from "../mainTabScreens/CreatePostsScreen";
 
 const MainTab = createBottomTabNavigator();
 
-const HomeScreen = () => {
+export const HomeScreen = () => {
   const [accentColor, placeholderTextColor] = useToken("colors", [
     "accentColor",
     "placeholderTextColor",
@@ -54,7 +54,7 @@ const HomeScreen = () => {
     >
       <MainTab.Screen
         name="CreatePost"
-        component={CreatePostsStack}
+        component={CreatePostsScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="plus" size={24} color={color} />
@@ -108,4 +108,3 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;

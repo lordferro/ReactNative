@@ -10,13 +10,18 @@ import { useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import usePreviousRouteName from "../../utils/GetPreviousScreen";
 import { IconBtnTransparent } from "../../Components/IconBtnTransparent";
+import { useDispatch } from "react-redux";
+import { authSlice } from "../../../redux/auth/authReducer";
 
-export const CameraScreen = ({ navigation }) => {
+export const CameraScreen = ({ navigation, route }) => {
   const [cameraReady, setCameraReady] = useState(false);
   const [snap, setSnap] = useState("");
   const [type, setType] = useState(CameraType.back);
   const [saveLocally, setsaveLocally] = useState(false);
   const prevScreen = usePreviousRouteName();
+  const dispatch = useDispatch()
+
+  const {setPhotoUri} = authSlice.actions
 
   const takePhoto = async () => {
     if (cameraReady) {
@@ -92,8 +97,12 @@ export const CameraScreen = ({ navigation }) => {
             {snap ? (
               <IconBtnTransparent
                 onPress={async () => {
-                  if(saveLocally) MediaLibrary.saveToLibraryAsync(snap);
-                  navigation.navigate(prevScreen, { snap });
+                  if (saveLocally) MediaLibrary.saveToLibraryAsync(snap);
+                  dispatch(setPhotoUri({photoUri:snap}))
+                  navigation.navigate(prevScreen, {
+                    screen: route.params.from,
+                    params: { snap },
+                  });
                 }}
                 IconGroup={AntDesign}
                 name="downcircleo"

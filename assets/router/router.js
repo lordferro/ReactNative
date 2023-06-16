@@ -5,14 +5,32 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegistrationScreen from "../Screens/Auth/RegistrationScreen";
 import LoginScreen from "../Screens/Auth/LoginScreen";
 import { CameraScreen } from "../Screens/NestedScreens/CameraScreen";
-import { Box, Center, Text } from "native-base";
-import HomeScreen from "../Screens/HomeScreen";
+import { MapScreen } from "../Screens/NestedScreens/MapScreen";
+import { HomeScreen } from "../Screens/NestedScreens/HomeScreen";
 
-const AuthStack = createNativeStackNavigator(); // указывает на группу навигаторов
+const AuthStack = createNativeStackNavigator();
+const NestedStack = createNativeStackNavigator();
 
 const useRoute = (props) => {
   return props ? (
-    <HomeScreen />
+    <NestedStack.Navigator>
+      <NestedStack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+
+      <NestedStack.Screen
+        name="CameraScreen"
+        component={CameraScreen}
+        options={{ headerShown: false }}
+      />
+      <NestedStack.Screen
+        name="MapScreen"
+        component={MapScreen}
+        options={{ headerShown: true }}
+      />
+    </NestedStack.Navigator>
   ) : (
     <AuthStack.Navigator initialRouteName="RegistrationScreen">
       <AuthStack.Screen
@@ -39,3 +57,8 @@ const useRoute = (props) => {
 };
 
 export default useRoute;
+
+// import { createStackNavigator } from "@react-navigation/stack";
+// import DefaultScreenCreatePosts from "../NestedScreens/DefaultScreenCreatePosts";
+// import { CameraScreen } from "../NestedScreens/CameraScreen";
+// import { MapScreen } from "../NestedScreens/MapScreen";

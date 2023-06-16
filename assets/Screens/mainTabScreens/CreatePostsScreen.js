@@ -25,7 +25,7 @@ import { useSelector } from "react-redux";
 
 import { writeDataToFirestore } from "../../serviceAPI/opereationsWithDB";
 
-const DefaultScreenCreatePosts = ({ navigation, route }) => {
+const CreatePostsScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState(null);
@@ -34,7 +34,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
   const [isCleared, setisCleared] = useState(false);
   const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
 
-  const { userId, name } = useSelector((state) => state.auth);
+  const { userId, name, photoUri } = useSelector((state) => state.auth);
 
   const toast = useToast();
 
@@ -62,10 +62,10 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
   }, [isCleared]);
 
   useEffect(() => {
-    if (route.params) {
-      setImage(route.params.snap);
+    if (photoUri) {
+      setImage(photoUri);
     }
-  }, [route.params]);
+  }, [photoUri]);
 
   useEffect(() => {
     if (image || title || location) {
@@ -121,7 +121,9 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
                 opacity={0.5}
                 position="absolute"
                 onPress={() => {
-                  navigation.navigate("CameraScreen");
+                  navigation.navigate("CameraScreen", {
+                    from: "CreatePosts",
+                  });
                 }}
                 w={60}
                 h={60}
@@ -158,9 +160,10 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               placeholderTextColor="placeholderTextColor"
               value={title}
               onChangeText={(value) => setTitle(value)}
+              onSubmitEditing={submitHandle}
             />
             <Input
-              value={address && address.city + ", " + address.country}
+              value={address && address.city + ",  " + address.country}
               isDisabled={!location}
               variant="underlined"
               mt={4}
@@ -204,7 +207,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               variant="submitBtn"
               width={70}
               alignSelf="center"
-              mt="15%"
+              mt="5%"
               mb={1}
               isDisabled={isDisabled}
               onPress={clearForm}
@@ -222,4 +225,4 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
   );
 };
 
-export default DefaultScreenCreatePosts;
+export default CreatePostsScreen;
