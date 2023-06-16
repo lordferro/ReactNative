@@ -20,27 +20,35 @@ import {
   useToken,
 } from "native-base";
 import * as Location from "expo-location";
+import { useSelector } from "react-redux";
+import { sendPhotoToServer } from "../../utils/sendImageToServer";
+import { storagePaths } from "../../consts/storagePaths";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../../firebase/config";
 
 const DefaultScreenCreatePosts = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [title, setTitle] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [IsLoadingToServer, setIsLoadingToServer] = useState(false);
+  const [isCleared, setisCleared] = useState(false);
+  const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
+
+  const { userId, name } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        console.log("Permission to access location was denied");
         return;
       }
 
       let { coords } = await Location.getCurrentPositionAsync({});
       setLocation(coords);
     })();
-  }, []);
+  }, [isCleared]);
 
   useEffect(() => {
     if (route.params) {
@@ -59,10 +67,39 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
   const clearForm = () => {
     setImage(null);
     setTitle("");
+    setLocation(null);
+    setisCleared(true);
   };
 
-  const submitHandle = () => {
-    navigation.navigate("Posts", { location, image, title });
+  const writeDataToFirestore = async () => {
+    try {
+      // setIsLoadingToServer(true);
+      const postPictureUrl = await sendPhotoToServer(
+        storagePaths.postsPictures,
+        image
+      );
+
+      const docRef = await addDoc(collection(db, "posts"), {
+        location: {
+          longitude: location.longitude,
+          latitude: location.latitude,
+        },
+        postPictureUrl,
+        title,
+        userId,
+        name,
+      });
+      console.log(docRef.id);
+      // setIsLoadingToServer(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const submitHandle = async () => {
+    writeDataToFirestore();
+    clearForm();
+    navigation.navigate("Posts");
   };
 
   return (
@@ -137,6 +174,9 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               placeholder="Location..."
               placeholderTextColor="placeholderTextColor"
               onFocus={() => {
+                if (!location) {
+                  setisCleared(true);
+                }
                 navigation.navigate("MapScreen", { location });
               }}
               InputLeftElement={
@@ -155,6 +195,8 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
             <Button
               w="full"
               mt={8}
+              isLoading={IsLoadingToServer}
+              isLoadingText="Publishing..."
               variant={"submitBtn"}
               isDisabled={isDisabled}
               onPress={submitHandle}
@@ -172,7 +214,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               alignSelf="center"
               mt="15%"
               mb={1}
-              isDisabled={isDisabled}
+              isDisabled={IsLoadingToServer || isDisabled}
               onPress={clearForm}
             >
               <FontAwesome

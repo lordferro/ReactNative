@@ -1,6 +1,11 @@
 import { Camera, CameraType } from "expo-camera";
 import { Box, Factory, HStack, Image } from "native-base";
-import { Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
+import {
+  Entypo,
+  Ionicons,
+  AntDesign,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import usePreviousRouteName from "../../utils/GetPreviousScreen";
@@ -10,6 +15,7 @@ export const CameraScreen = ({ navigation }) => {
   const [cameraReady, setCameraReady] = useState(false);
   const [snap, setSnap] = useState("");
   const [type, setType] = useState(CameraType.back);
+  const [saveLocally, setsaveLocally] = useState(false);
   const prevScreen = usePreviousRouteName();
 
   const takePhoto = async () => {
@@ -55,6 +61,24 @@ export const CameraScreen = ({ navigation }) => {
             />
           </Box>
         )}
+        {snap &&
+          (saveLocally ? (
+            <IconBtnTransparent
+              IconGroup={MaterialCommunityIcons}
+              name="content-save-move-outline"
+              onPress={() => {
+                setsaveLocally(false);
+              }}
+            />
+          ) : (
+            <IconBtnTransparent
+              IconGroup={MaterialCommunityIcons}
+              name="content-save-off-outline"
+              onPress={() => {
+                setsaveLocally(true);
+              }}
+            />
+          ))}
         {cameraReady && (
           <HStack display="flex" space={"25%"}>
             <IconBtnTransparent
@@ -68,7 +92,7 @@ export const CameraScreen = ({ navigation }) => {
             {snap ? (
               <IconBtnTransparent
                 onPress={async () => {
-                  MediaLibrary.saveToLibraryAsync(snap);
+                  if(saveLocally) MediaLibrary.saveToLibraryAsync(snap);
                   navigation.navigate(prevScreen, { snap });
                 }}
                 IconGroup={AntDesign}

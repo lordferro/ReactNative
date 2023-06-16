@@ -7,6 +7,7 @@ import {
 import { auth } from "../../firebase/config";
 import { authSlice } from "./authReducer";
 import { sendPhotoToServer } from "../../assets/utils/sendImageToServer";
+import { storagePaths } from "../../assets/consts/storagePaths";
 
 const { authSignOut, authStateChange, updateUserProfile } = authSlice.actions;
 
@@ -27,8 +28,8 @@ export const authSignUpUser =
     try {
       await createUserWithEmailAndPassword(auth, email, password);
 
-      const avatarUrl = await sendPhotoToServer(image);
-      
+      const avatarUrl = await sendPhotoToServer(storagePaths.userAvatar, image);
+
       await updateProfile(auth.currentUser, {
         displayName: name,
         photoURL: avatarUrl,
