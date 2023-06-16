@@ -28,6 +28,7 @@ import { writeDataToFirestore } from "../../serviceAPI/opereationsWithDB";
 const DefaultScreenCreatePosts = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [location, setLocation] = useState(null);
+  const [address, setAddress] = useState(null);
   const [title, setTitle] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [isCleared, setisCleared] = useState(false);
@@ -39,14 +40,24 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-        return;
-      }
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
+          return;
+        }
 
-      let { coords } = await Location.getCurrentPositionAsync({});
-      setLocation(coords);
+        let { coords } = await Location.getCurrentPositionAsync({});
+        setLocation(coords);
+
+        let address = await Location.reverseGeocodeAsync({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
+        setAddress(address[0]);
+      } catch (error) {
+        toast.show(error.message);
+      }
     })();
   }, [isCleared]);
 
@@ -68,6 +79,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
     setImage(null);
     setTitle("");
     setLocation(null);
+    setAddress(null);
     setisCleared(true);
   }
 
@@ -78,7 +90,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
       });
       return;
     }
-    writeDataToFirestore(image, location, title, userId, name);
+    writeDataToFirestore(image, location, address, title, userId, name);
     clearForm();
     navigation.navigate("Posts");
   };
@@ -148,6 +160,7 @@ const DefaultScreenCreatePosts = ({ navigation, route }) => {
               onChangeText={(value) => setTitle(value)}
             />
             <Input
+              value={address && address.city + ", " + address.country}
               isDisabled={!location}
               variant="underlined"
               mt={4}

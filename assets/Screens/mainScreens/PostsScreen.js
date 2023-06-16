@@ -1,26 +1,73 @@
-import { Box, Image } from "native-base";
+import {
+  Box,
+  Center,
+  FlatList,
+  HStack,
+  Image,
+  Spacer,
+  Text,
+  VStack,
+  useToken,
+} from "native-base";
 import React, { useEffect, useState } from "react";
-import { auth, AuthProvider } from "../../../firebase/config";
-import { getDownloadURL } from "firebase/storage";
-import { updateCurrentUser } from "firebase/auth";
-// const state = { image, location, title };
 import { useSelector } from "react-redux";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../../firebase/config";
+import { EvilIcons } from "@expo/vector-icons";
 
 const PostsScreen = ({ route }) => {
   const [posts, setPosts] = useState([]);
-
-  const getAllPosts = async () => {}
+  const { userId } = useSelector((state) => state.auth);
+  const [placeholderTextColor] = useToken("colors", ["placeholderTextColor"]);
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    const q = query(collection(db, "posts"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postsDB = [];
+      querySnapshot.forEach((doc) => {
+        if (doc.data().userId === userId) {
+          postsDB.push({ ...doc.data(), id: doc.id });
+          console.log(doc.id);
+        }
+      });
+      setPosts(postsDB);
+    });
+  }, []);
 
   return (
-    <Box flex={1}>
-      
-    </Box>
+    <VStack flex={1} alignItems="center" paddingX="16px">
+      <FlatList
+        data={posts}
+        renderItem={({ item }) => (
+          <>
+            <Box w={["100%", "380px"]}>
+              <Center py={2}>
+                <Image
+                  borderRadius="8px"
+                  alt={item.title}
+                  w="100%"
+                  minW={340}
+                  h={240}
+                  source={{ uri: item.postPictureUrl }}
+                />
+              </Center>
+              <Text fontSize="xl" fontWeight={500}>
+                {item.title}
+              </Text>
+              <Text fontSize="xl" textAlign="right">
+                <EvilIcons
+                  marginRight={1}
+                  name="location"
+                  size={30}
+                  color={placeholderTextColor}
+                />
+                {item.address.city + ", " + item.address.country}
+              </Text>
+            </Box>
+          </>
+        )} keyExtractor={item=>item.id}
+      />
+    </VStack>
   );
 };
 
